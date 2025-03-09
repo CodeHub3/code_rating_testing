@@ -20,6 +20,23 @@ const TaskRatingUI = ({taskId, onRated}) => {
     fetchUsername();
   }, []);
 
+  if (isLoading) {
+        return (
+            <Box sx={{p: 4, textAlign: "center"}}>
+                <CircularProgress/>
+                <Typography sx={{mt: 2, fontSize: 16}}>Loading Task...</Typography>
+            </Box>
+        );
+    }
+
+    if (error || !data?.data) {
+        return (
+            <Box sx={{p: 4, textAlign: "center"}}>
+                <Alert severity="error">Error loading task. Please try again.</Alert>
+            </Box>
+        );
+    }
+
   const handleRating = (value) => {
     setRating(value);
     setError(null); // Clear any previous error
