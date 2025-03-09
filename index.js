@@ -6,6 +6,7 @@ import '../RatingUI/CommitFileRatingUI.scss';
 import CommitRatingSubmitButton from '../RatingUI/CommitRatingSubmitButton';
 import CommitFileRatingUI from '../RatingUI/CommitFileRatingUI';
 
+// Testing
 console.log('Content script loaded');
 
 // Extract username from the DOM when the page loads
@@ -58,24 +59,6 @@ const injectTaskRatingUI = (taskId, url) => {
   );
 };
 
-// Extract changed files from GitHub commit page
-const extractChangedFiles = () => {
-  const fileHeaders = document.querySelectorAll(
-    '.DiffFileHeader-module__diff-file-header--TjXyn'
-  );
-  return Array.from(fileHeaders)
-    .map((header) => {
-      const fileLink = header.querySelector('h3 a');
-      if (!fileLink) return null;
-
-      return {
-        filePath: fileLink.innerText.trim(), // Extract the file path
-        fileElement: header, // This is where we insert the rating UI
-      };
-    })
-    .filter(Boolean);
-};
-
 // Notify background script that a commit was rated
 const notifyCommitRated = async (url) => {
   await browser.runtime.sendMessage({type: 'REMOVE_PENDING_RATING', url});
@@ -98,6 +81,38 @@ const injectCommitRatingSubmitButton = (commitSha, url, ratings) => {
     buttonContainer
   );
 };
+
+
+// Extract changed files from GitHub commit page
+const extractChangedFiles = () => {
+  const fileHeaders = document.querySelectorAll(
+    '.DiffFileHeader-module__diff-file-header--TjXyn'
+  );
+  return Array.from(fileHeaders)
+    .map((header) => {
+      const fileLink = header.querySelector('h3 a');
+      if (!fileLink) return null;
+
+      return {
+        filePath: fileLink.innerText.trim(), // Extract the file path
+        fileElement: header, // This is where we insert the rating UI
+      };
+    })
+    .filter(Boolean);
+};
+
+// Listen for messages from the background script
+browser.runtime.onMessage.addListener((message) => {
+  if (message.type === 'INJECT_RATING_UI') {
+    const {type, id, url} = message.data;
+
+    if (type === 'task') {
+      injectTaskRatingUI(id, url);
+    } else if (type === 'commit') {
+      injectCommitRatingUI(id, url);
+    }
+  }
+});
 
 const injectCommitRatingUI = (commitSha, url) => {
   console.log('Injecting commit rating UI...');
@@ -138,15 +153,3 @@ const injectCommitRatingUI = (commitSha, url) => {
   injectCommitRatingSubmitButton(commitSha, url, ratings);
 };
 
-// Listen for messages from the background script
-browser.runtime.onMessage.addListener((message) => {
-  if (message.type === 'INJECT_RATING_UI') {
-    const {type, id, url} = message.data;
-
-    if (type === 'task') {
-      injectTaskRatingUI(id, url);
-    } else if (type === 'commit') {
-      injectCommitRatingUI(id, url);
-    }
-  }
-});
