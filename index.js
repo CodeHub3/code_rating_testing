@@ -31,6 +31,17 @@ const notifyTaskRated = async (url) => {
   await browser.runtime.sendMessage({type: 'REMOVE_PENDING_RATING', url});
   console.log(`Notified background script about rated task: ${url}`);
 };
+// Notify the background script that a task was rated
+const notifyTaskRated = async (url) => {
+  await browser.runtime.sendMessage({type: 'REMOVE_PENDING_RATING', url});
+  console.log(`Notified background script about rated task: ${url}`);
+};
+
+// Notify the background script that a task was rated
+const notifyTaskRated = async (url) => {
+  await browser.runtime.sendMessage({type: 'REMOVE_PENDING_RATING', url});
+  console.log(`Notified background script about rated task: ${url}`);
+};
 
 // Helper function to inject Task Rating UI
 const injectTaskRatingUI = (taskId, url) => {
