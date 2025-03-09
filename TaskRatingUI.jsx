@@ -20,6 +20,14 @@ const TaskRatingUI = ({taskId, onRated}) => {
     fetchUsername();
   }, []);
 
+  
+    if (error || !data?.data) {
+        return (
+            <Box sx={{p: 4, textAlign: "center"}}>
+                <Alert severity="error">Error loading task. Please try again.</Alert>
+            </Box>
+        );
+    }
   if (isLoading) {
         return (
             <Box sx={{p: 4, textAlign: "center"}}>
@@ -29,18 +37,6 @@ const TaskRatingUI = ({taskId, onRated}) => {
         );
     }
 
-    if (error || !data?.data) {
-        return (
-            <Box sx={{p: 4, textAlign: "center"}}>
-                <Alert severity="error">Error loading task. Please try again.</Alert>
-            </Box>
-        );
-    }
-
-  const handleRating = (value) => {
-    setRating(value);
-    setError(null); // Clear any previous error
-  };
 
   const submitRating = async () => {
     if (!rating) {
