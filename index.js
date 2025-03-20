@@ -27,15 +27,23 @@ console.log('Content script loaded');
 })();
 
 // Notify the background script that a task was rated
-const notifyTaskRated = async (url) => {
+/*const notifyTaskRated = async (url) => {
   await browser.runtime.sendMessage({type: 'REMOVE_PENDING_RATING', url});
   console.log(`Notified background script about rated task: ${url}`);
-};
+};*/
 // Notify the background script that a task was rated
 const notifyTaskRated = async (url) => {
   await browser.runtime.sendMessage({type: 'REMOVE_PENDING_RATING', url});
   console.log(`Notified background script about rated task: ${url}`);
 };
+const notifyTaskRated = async (url) => {
+  await browser.runtime.sendMessage({type: 'REMOVE_PENDING_RATING', url});
+  console.log(`Notified background script about rated task: ${url}`);
+};
+
+
+
+// THIS IS A COMMENT
 
 // Notify the background script that a task was rated
 const notifyTaskRated = async (url) => {
