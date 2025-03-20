@@ -12,11 +12,11 @@ interface User {
     username: string;
 }
 
-interface Task {
+/*interface Task {
     number: number;
     title: string;
     url: string;
-}
+}*/
 
 export const RepoCommits = () => {
     const {repoId} = useParams();
@@ -26,6 +26,8 @@ export const RepoCommits = () => {
     const handleCommitSelection = (commitHash: string) => {
         push(`/repo/${repoId}/commit/${commitHash}`);
     };
+
+    // THIS IS A COMMENT
 
     const columns: GridColDef[] = [
         {
@@ -115,6 +117,15 @@ export const RepoCommits = () => {
             )
         },
     ];
+
+    if (isLoading) {
+        return (
+            <Box sx={{ p: 3, textAlign: "center" }}>
+                <CircularProgress />
+                <Typography sx={{ mt: 2 }}>Loading Commits...</Typography>
+            </Box>
+        );
+    }
 
     if (isLoading) {
         return (
